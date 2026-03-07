@@ -1,13 +1,18 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
-import { User, UserNote } from "@/lib/types";
-import { mockUser } from "@/lib/mock-data";
+import { User, UserNote, RoadmapStage, Lesson, Resource } from "@/lib/types";
+import { mockUser, roadmapStages as initialStages, lessons as initialLessons, resources as initialResources } from "@/lib/mock-data";
 
 interface AppContextType {
   user: User | null;
   isLoggedIn: boolean;
+  isAdmin: boolean;
   isDark: boolean;
   notes: UserNote[];
+  stages: RoadmapStage[];
+  lessons: Lesson[];
+  resources: Resource[];
   login: (email: string, password: string) => void;
+  loginAsAdmin: () => void;
   logout: () => void;
   toggleTheme: () => void;
   toggleLessonComplete: (lessonId: string) => void;
@@ -15,6 +20,16 @@ interface AppContextType {
   addNote: (lessonId: string, content: string) => void;
   isLessonCompleted: (lessonId: string) => boolean;
   isBookmarked: (lessonId: string) => boolean;
+  // Admin CRUD
+  addStage: (stage: RoadmapStage) => void;
+  updateStage: (stage: RoadmapStage) => void;
+  deleteStage: (id: string) => void;
+  addLesson: (lesson: Lesson) => void;
+  updateLesson: (lesson: Lesson) => void;
+  deleteLesson: (id: string) => void;
+  addResource: (resource: Resource) => void;
+  updateResource: (resource: Resource) => void;
+  deleteResource: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -23,6 +38,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(mockUser);
   const [isDark, setIsDark] = useState(true);
   const [notes, setNotes] = useState<UserNote[]>([]);
+  const [stages, setStages] = useState<RoadmapStage[]>(initialStages);
+  const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
+  const [resources, setResources] = useState<Resource[]>(initialResources);
 
   React.useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
@@ -30,6 +48,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const login = useCallback((_email: string, _password: string) => {
     setUser(mockUser);
+  }, []);
+
+  const loginAsAdmin = useCallback(() => {
+    setUser({ ...mockUser, role: "admin", name: "Admin User" });
   }, []);
 
   const logout = useCallback(() => setUser(null), []);
@@ -76,14 +98,46 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     [user]
   );
 
+  // Admin CRUD
+  const addStage = useCallback((stage: RoadmapStage) => setStages((s) => [...s, stage]), []);
+  const updateStage = useCallback((stage: RoadmapStage) => setStages((s) => s.map((x) => (x.id === stage.id ? stage : x))), []);
+  const deleteStage = useCallback((id: string) => {
+    setStages((s) => s.filter((x) => x.id !== id));
+    setLessons((l) => l.filter((x) => x.stageId !== id));
+  }, []);
+
+  const addLesson = useCallback((lesson: Lesson) => {
+    setLessons((l) => [...l, lesson]);
+    setStages((s) => s.map((st) => st.id === lesson.stageId ? { ...st, lessonIds: [...st.lessonIds, lesson.id] } : st));
+  }, []);
+  const updateLesson = useCallback((lesson: Lesson) => setLessons((l) => l.map((x) => (x.id === lesson.id ? lesson : x))), []);
+  const deleteLesson = useCallback((id: string) => {
+    setLessons((l) => {
+      const lesson = l.find((x) => x.id === id);
+      if (lesson) {
+        setStages((s) => s.map((st) => st.id === lesson.stageId ? { ...st, lessonIds: st.lessonIds.filter((lid) => lid !== id) } : st));
+      }
+      return l.filter((x) => x.id !== id);
+    });
+  }, []);
+
+  const addResource = useCallback((resource: Resource) => setResources((r) => [...r, resource]), []);
+  const updateResource = useCallback((resource: Resource) => setResources((r) => r.map((x) => (x.id === resource.id ? resource : x))), []);
+  const deleteResource = useCallback((id: string) => setResources((r) => r.filter((x) => x.id !== id)), []);
+
   return (
     <AppContext.Provider
       value={{
         user,
         isLoggedIn: !!user,
+        isAdmin: user?.role === "admin",
         isDark,
         notes,
+        stages,
+        lessons,
+        resources,
         login,
+        loginAsAdmin,
         logout,
         toggleTheme,
         toggleLessonComplete,
@@ -91,6 +145,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         addNote,
         isLessonCompleted,
         isBookmarked,
+        addStage, updateStage, deleteStage,
+        addLesson, updateLesson, deleteLesson,
+        addResource, updateResource, deleteResource,
       }}
     >
       {children}

@@ -13,6 +13,11 @@ import Resources from "./pages/Resources";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminOverview from "./pages/admin/AdminOverview";
+import AdminStages from "./pages/admin/AdminStages";
+import AdminLessons from "./pages/admin/AdminLessons";
+import AdminResources from "./pages/admin/AdminResources";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +37,12 @@ const App = () => (
             <Route path="/resources" element={<Resources />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminOverview />} />
+              <Route path="stages" element={<AdminStages />} />
+              <Route path="lessons" element={<AdminLessons />} />
+              <Route path="resources" element={<AdminResources />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -1,21 +1,22 @@
 import { Link, useLocation } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { BookOpen, LayoutDashboard, Map, Library, User, Sun, Moon, LogOut, LogIn, Menu, X } from "lucide-react";
+import { BookOpen, LayoutDashboard, Map, Library, User, Sun, Moon, LogOut, LogIn, Menu, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-const navItems = [
-  { to: "/", label: "Home", icon: BookOpen },
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/roadmap", label: "Roadmap", icon: Map },
-  { to: "/resources", label: "Resources", icon: Library },
-  { to: "/profile", label: "Profile", icon: User },
-];
-
 const Header = () => {
-  const { isLoggedIn, isDark, toggleTheme, logout } = useApp();
+  const { isLoggedIn, isAdmin, isDark, toggleTheme, logout, loginAsAdmin, user } = useApp();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navItems = [
+    { to: "/", label: "Home", icon: BookOpen },
+    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/roadmap", label: "Roadmap", icon: Map },
+    { to: "/resources", label: "Resources", icon: Library },
+    { to: "/profile", label: "Profile", icon: User },
+    ...(isAdmin ? [{ to: "/admin", label: "Admin", icon: Shield }] : []),
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
@@ -30,15 +31,13 @@ const Header = () => {
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const active = location.pathname === item.to;
+            const active = location.pathname === item.to || (item.to === "/admin" && location.pathname.startsWith("/admin"));
             return (
               <Link
                 key={item.to}
                 to={item.to}
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -49,6 +48,11 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-2">
+          {isLoggedIn && !isAdmin && (
+            <Button variant="ghost" size="sm" onClick={loginAsAdmin} className="hidden gap-1.5 text-xs md:flex">
+              <Shield className="h-3.5 w-3.5" /> Admin Mode
+            </Button>
+          )}
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-9 w-9">
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
@@ -63,12 +67,7 @@ const Header = () => {
               </Button>
             </Link>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 md:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
+          <Button variant="ghost" size="icon" className="h-9 w-9 md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
@@ -81,19 +80,16 @@ const Header = () => {
               const Icon = item.icon;
               const active = location.pathname === item.to;
               return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                    active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
+                <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"}`}>
+                  <Icon className="h-4 w-4" /> {item.label}
                 </Link>
               );
             })}
+            {isLoggedIn && !isAdmin && (
+              <button onClick={() => { loginAsAdmin(); setMobileOpen(false); }} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted">
+                <Shield className="h-4 w-4" /> Admin Mode
+              </button>
+            )}
           </nav>
         </div>
       )}

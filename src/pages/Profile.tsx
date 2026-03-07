@@ -1,11 +1,10 @@
 import { useApp } from "@/context/AppContext";
-import { lessons, roadmapStages } from "@/lib/mock-data";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { User, BookOpen, Flame, Trophy, Calendar } from "lucide-react";
 
 const Profile = () => {
-  const { user, isLoggedIn } = useApp();
+  const { user, isLoggedIn, stages, lessons } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
@@ -19,7 +18,6 @@ const Profile = () => {
   }
 
   const completedCount = user.completedLessons.length;
-  const totalLessons = lessons.length;
 
   return (
     <div className="container max-w-2xl py-8">
@@ -31,9 +29,7 @@ const Profile = () => {
           <div>
             <h1 className="font-display text-2xl font-bold">{user.name}</h1>
             <p className="text-muted-foreground">{user.email}</p>
-            <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-              <Calendar className="h-3 w-3" /> Joined {new Date(user.joinedAt).toLocaleDateString()}
-            </div>
+            <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Calendar className="h-3 w-3" /> Joined {new Date(user.joinedAt).toLocaleDateString()}</div>
           </div>
         </div>
 
@@ -57,9 +53,9 @@ const Profile = () => {
 
         <h3 className="mb-4 font-display text-lg font-semibold">Stage Progress</h3>
         <div className="space-y-3">
-          {roadmapStages.map((stage) => {
+          {stages.map((stage) => {
             const stageCompleted = stage.lessonIds.filter((id) => user.completedLessons.includes(id)).length;
-            const pct = Math.round((stageCompleted / stage.lessonIds.length) * 100);
+            const pct = stage.lessonIds.length > 0 ? Math.round((stageCompleted / stage.lessonIds.length) * 100) : 0;
             return (
               <div key={stage.id}>
                 <div className="mb-1 flex items-center justify-between text-sm">
