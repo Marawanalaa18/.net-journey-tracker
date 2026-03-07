@@ -1,0 +1,73 @@
+import { RoadmapStage, Lesson, Resource, User } from "./types";
+
+export const mockUser: User = {
+  id: "1",
+  name: "Alex Developer",
+  email: "alex@example.com",
+  avatar: "",
+  role: "user",
+  streak: 7,
+  completedLessons: ["l1", "l2", "l3", "l4", "l5"],
+  bookmarks: ["l6", "l8"],
+  joinedAt: "2025-01-15",
+};
+
+export const roadmapStages: RoadmapStage[] = [
+  { id: "s1", title: "Programming Fundamentals", description: "Core programming concepts and logic building", order: 1, icon: "Code2", color: "primary", lessonIds: ["l1", "l2"] },
+  { id: "s2", title: "C# Fundamentals", description: "Master the C# programming language from basics to advanced", order: 2, icon: "Hash", color: "accent", lessonIds: ["l3", "l4"] },
+  { id: "s3", title: "Object-Oriented Programming", description: "Learn OOP principles: encapsulation, inheritance, polymorphism", order: 3, icon: "Box", color: "info", lessonIds: ["l5", "l6"] },
+  { id: "s4", title: "Data Structures & Algorithms", description: "Essential data structures and algorithm design", order: 4, icon: "Network", color: "warning", lessonIds: ["l7", "l8"] },
+  { id: "s5", title: "Databases & SQL", description: "Relational databases, SQL queries, and database design", order: 5, icon: "Database", color: "success", lessonIds: ["l9", "l10"] },
+  { id: "s6", title: ".NET Fundamentals", description: "Understanding the .NET ecosystem and runtime", order: 6, icon: "Layers", color: "primary", lessonIds: ["l11", "l12"] },
+  { id: "s7", title: "ASP.NET Core", description: "Build modern web applications with ASP.NET Core", order: 7, icon: "Globe", color: "accent", lessonIds: ["l13", "l14"] },
+  { id: "s8", title: "Web APIs", description: "Design and build RESTful APIs", order: 8, icon: "Plug", color: "info", lessonIds: ["l15", "l16"] },
+  { id: "s9", title: "Authentication & Security", description: "Implement authentication, authorization, and security best practices", order: 9, icon: "Shield", color: "warning", lessonIds: ["l17", "l18"] },
+  { id: "s10", title: "Entity Framework Core", description: "ORM and data access with EF Core", order: 10, icon: "Table", color: "success", lessonIds: ["l19", "l20"] },
+  { id: "s11", title: "Clean Architecture", description: "Design scalable and maintainable applications", order: 11, icon: "FolderTree", color: "primary", lessonIds: ["l21", "l22"] },
+  { id: "s12", title: "Testing", description: "Unit testing, integration testing, and TDD", order: 12, icon: "TestTube", color: "accent", lessonIds: ["l23", "l24"] },
+  { id: "s13", title: "Deployment", description: "CI/CD, Docker, and cloud deployment", order: 13, icon: "Rocket", color: "info", lessonIds: ["l25", "l26"] },
+];
+
+export const lessons: Lesson[] = [
+  { id: "l1", stageId: "s1", title: "Introduction to Programming", description: "Learn what programming is and how computers execute instructions. Understand variables, data types, and basic I/O operations.", videoId: "zOjov-2OZ0E", order: 1, duration: "45 min", difficulty: "beginner", resources: [] },
+  { id: "l2", stageId: "s1", title: "Control Flow & Loops", description: "Master conditional statements (if/else, switch) and loops (for, while, do-while) to control program execution.", videoId: "jTYiNjvnHZY", order: 2, duration: "50 min", difficulty: "beginner", resources: [] },
+  { id: "l3", stageId: "s2", title: "C# Syntax & Basics", description: "Get started with C# syntax, namespaces, classes, and the Main method. Write your first C# console application.", videoId: "ravLFzIGuCM", order: 1, duration: "60 min", difficulty: "beginner", resources: [] },
+  { id: "l4", stageId: "s2", title: "C# Advanced Features", description: "Explore LINQ, async/await, delegates, events, and generics in C#.", videoId: "gfkTfcpWqAY", order: 2, duration: "75 min", difficulty: "intermediate", resources: [] },
+  { id: "l5", stageId: "s3", title: "OOP Principles", description: "Deep dive into encapsulation, inheritance, polymorphism, and abstraction with real-world examples.", videoId: "pTB0EiLXUC8", order: 1, duration: "65 min", difficulty: "intermediate", resources: [] },
+  { id: "l6", stageId: "s3", title: "Design Patterns Intro", description: "Learn common design patterns: Singleton, Factory, Observer, and Strategy patterns.", videoId: "NU_1StN5Tkk", order: 2, duration: "70 min", difficulty: "intermediate", resources: [] },
+  { id: "l7", stageId: "s4", title: "Arrays, Lists & Stacks", description: "Understand fundamental data structures and their implementations in C#.", videoId: "RBSGKlAvoiM", order: 1, duration: "55 min", difficulty: "intermediate", resources: [] },
+  { id: "l8", stageId: "s4", title: "Sorting & Searching", description: "Implement common sorting and searching algorithms and analyze their complexity.", videoId: "ZA-tUyM_y7s", order: 2, duration: "60 min", difficulty: "intermediate", resources: [] },
+  { id: "l9", stageId: "s5", title: "SQL Fundamentals", description: "Learn SQL queries: SELECT, INSERT, UPDATE, DELETE, JOINs, and subqueries.", videoId: "HXV3zeQKqGY", order: 1, duration: "70 min", difficulty: "beginner", resources: [] },
+  { id: "l10", stageId: "s5", title: "Database Design", description: "Normalization, relationships, indexes, and best practices for database schema design.", videoId: "ztHopE5Wnpc", order: 2, duration: "65 min", difficulty: "intermediate", resources: [] },
+  { id: "l11", stageId: "s6", title: ".NET Ecosystem Overview", description: "Understand .NET runtime, SDK, CLI tools, and the project structure.", videoId: "eIHKZfgddLM", order: 1, duration: "50 min", difficulty: "beginner", resources: [] },
+  { id: "l12", stageId: "s6", title: "NuGet & Dependencies", description: "Managing packages and dependencies with NuGet in .NET projects.", videoId: "WW3bO1lNDmo", order: 2, duration: "40 min", difficulty: "beginner", resources: [] },
+  { id: "l13", stageId: "s7", title: "ASP.NET Core MVC", description: "Build web apps with the Model-View-Controller pattern in ASP.NET Core.", videoId: "hZ1DASYd9Dg", order: 1, duration: "80 min", difficulty: "intermediate", resources: [] },
+  { id: "l14", stageId: "s7", title: "Razor Pages & Blazor", description: "Explore Razor Pages for page-focused scenarios and Blazor for interactive UIs.", videoId: "QD2-DwuOfKM", order: 2, duration: "75 min", difficulty: "intermediate", resources: [] },
+  { id: "l15", stageId: "s8", title: "Building REST APIs", description: "Create RESTful APIs with controllers, routing, model binding, and validation.", videoId: "fmvcAzHpsk8", order: 1, duration: "70 min", difficulty: "intermediate", resources: [] },
+  { id: "l16", stageId: "s8", title: "API Versioning & Documentation", description: "Implement API versioning, Swagger/OpenAPI documentation, and best practices.", videoId: "YGRN5M0-3DI", order: 2, duration: "55 min", difficulty: "advanced", resources: [] },
+  { id: "l17", stageId: "s9", title: "Identity & JWT Auth", description: "Implement ASP.NET Core Identity and JWT token-based authentication.", videoId: "v7MpTlUczUg", order: 1, duration: "85 min", difficulty: "advanced", resources: [] },
+  { id: "l18", stageId: "s9", title: "OAuth & Security Best Practices", description: "Integrate OAuth providers and implement security headers, CORS, and HTTPS.", videoId: "t18Kzm1rVBM", order: 2, duration: "70 min", difficulty: "advanced", resources: [] },
+  { id: "l19", stageId: "s10", title: "EF Core Basics", description: "Set up Entity Framework Core, define models, and perform CRUD operations.", videoId: "SryQxUeChMc", order: 1, duration: "75 min", difficulty: "intermediate", resources: [] },
+  { id: "l20", stageId: "s10", title: "Migrations & Advanced Queries", description: "Database migrations, complex LINQ queries, and performance optimization.", videoId: "qkJ9keBmQWo", order: 2, duration: "65 min", difficulty: "advanced", resources: [] },
+  { id: "l21", stageId: "s11", title: "SOLID Principles", description: "Understand and apply SOLID principles for clean, maintainable code.", videoId: "agkWYPUcLpg", order: 1, duration: "60 min", difficulty: "intermediate", resources: [] },
+  { id: "l22", stageId: "s11", title: "Clean Architecture in Practice", description: "Implement Clean Architecture with layers: Domain, Application, Infrastructure, Presentation.", videoId: "dK4Yb6-LxAk", order: 2, duration: "90 min", difficulty: "advanced", resources: [] },
+  { id: "l23", stageId: "s12", title: "Unit Testing with xUnit", description: "Write unit tests using xUnit, Moq, and follow TDD principles.", videoId: "ub3P8c87GKo", order: 1, duration: "70 min", difficulty: "intermediate", resources: [] },
+  { id: "l24", stageId: "s12", title: "Integration & E2E Testing", description: "Set up integration tests with WebApplicationFactory and end-to-end testing.", videoId: "7roqteWLw4s", order: 2, duration: "65 min", difficulty: "advanced", resources: [] },
+  { id: "l25", stageId: "s13", title: "Docker & Containers", description: "Containerize .NET applications with Docker and Docker Compose.", videoId: "f0lMGPB10bM", order: 1, duration: "75 min", difficulty: "intermediate", resources: [] },
+  { id: "l26", stageId: "s13", title: "CI/CD & Cloud Deploy", description: "Set up CI/CD pipelines with GitHub Actions and deploy to Azure/AWS.", videoId: "scEDHsr3APg", order: 2, duration: "80 min", difficulty: "advanced", resources: [] },
+];
+
+export const resources: Resource[] = [
+  { id: "r1", title: "Microsoft C# Documentation", url: "https://learn.microsoft.com/en-us/dotnet/csharp/", type: "article", topic: "C#", difficulty: "beginner", description: "Official C# language documentation" },
+  { id: "r2", title: "ASP.NET Core Tutorial", url: "https://learn.microsoft.com/en-us/aspnet/core/", type: "article", topic: "ASP.NET", difficulty: "intermediate", description: "Official ASP.NET Core docs" },
+  { id: "r3", title: ".NET YouTube Channel", url: "https://youtube.com/@dotnet", type: "video", topic: ".NET", difficulty: "beginner", description: "Official .NET YouTube channel" },
+  { id: "r4", title: "Clean Architecture Repo", url: "https://github.com/jasontaylordev/CleanArchitecture", type: "repo", topic: "Architecture", difficulty: "advanced", description: "Clean Architecture Solution Template" },
+  { id: "r5", title: "C# in Depth", url: "https://csharpindepth.com/", type: "book", topic: "C#", difficulty: "advanced", description: "Deep dive into C# by Jon Skeet" },
+  { id: "r6", title: "LeetCode", url: "https://leetcode.com/", type: "practice", topic: "Algorithms", difficulty: "intermediate", description: "Practice coding problems" },
+  { id: "r7", title: "Entity Framework Core Docs", url: "https://learn.microsoft.com/en-us/ef/core/", type: "article", topic: "EF Core", difficulty: "intermediate", description: "Official EF Core documentation" },
+  { id: "r8", title: "Nick Chapsas YouTube", url: "https://youtube.com/@nickchapsas", type: "video", topic: ".NET", difficulty: "intermediate", description: "Advanced .NET tutorials" },
+  { id: "r9", title: "eShopOnWeb", url: "https://github.com/dotnet-architecture/eShopOnWeb", type: "repo", topic: "Architecture", difficulty: "advanced", description: "Sample ASP.NET Core reference application" },
+  { id: "r10", title: "HackerRank C#", url: "https://www.hackerrank.com/domains/csharp", type: "practice", topic: "C#", difficulty: "beginner", description: "C# coding challenges" },
+  { id: "r11", title: "Pro ASP.NET Core", url: "https://www.apress.com/", type: "book", topic: "ASP.NET", difficulty: "advanced", description: "Comprehensive ASP.NET Core book" },
+  { id: "r12", title: "IAmTimCorey YouTube", url: "https://youtube.com/@IAmTimCorey", type: "video", topic: "C#", difficulty: "beginner", description: "C# and .NET tutorials for beginners" },
+];
