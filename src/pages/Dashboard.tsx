@@ -1,12 +1,11 @@
 import { useApp } from "@/context/AppContext";
-import { roadmapStages, lessons } from "@/lib/mock-data";
 import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { BookOpen, Flame, Trophy, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
-  const { user, isLoggedIn } = useApp();
+  const { user, isLoggedIn, stages, lessons } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
@@ -21,12 +20,11 @@ const Dashboard = () => {
 
   const totalLessons = lessons.length;
   const completedCount = user.completedLessons.length;
-  const progressPercent = Math.round((completedCount / totalLessons) * 100);
+  const progressPercent = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
-  const chartData = roadmapStages.map((stage) => {
-    const stageLessons = stage.lessonIds;
-    const completed = stageLessons.filter((id) => user.completedLessons.includes(id)).length;
-    return { name: stage.title.split(" ").slice(0, 2).join(" "), completed, total: stageLessons.length };
+  const chartData = stages.map((stage) => {
+    const completed = stage.lessonIds.filter((id) => user.completedLessons.includes(id)).length;
+    return { name: stage.title.split(" ").slice(0, 2).join(" "), completed, total: stage.lessonIds.length };
   });
 
   const nextLesson = lessons.find((l) => !user.completedLessons.includes(l.id));
@@ -40,7 +38,6 @@ const Dashboard = () => {
         <p className="text-muted-foreground">Continue your .NET learning journey</p>
       </div>
 
-      {/* Stats Row */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Completed", value: `${completedCount}/${totalLessons}`, icon: BookOpen, sub: `${progressPercent}% done` },
@@ -67,21 +64,13 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Chart */}
         <div className="glass-card p-6 lg:col-span-2">
           <h3 className="mb-4 font-display text-lg font-semibold">Progress by Stage</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
               <XAxis dataKey="name" fontSize={11} tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))" }} />
               <YAxis fontSize={11} tickLine={false} axisLine={false} tick={{ fill: "hsl(var(--muted-foreground))" }} />
-              <Tooltip
-                contentStyle={{
-                  background: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "0.5rem",
-                  color: "hsl(var(--foreground))",
-                }}
-              />
+              <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "0.5rem", color: "hsl(var(--foreground))" }} />
               <Bar dataKey="completed" radius={[4, 4, 0, 0]}>
                 {chartData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
@@ -91,34 +80,26 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Continue Learning */}
         <div className="flex flex-col gap-4">
           {nextLesson && (
             <div className="glass-card glow-border p-6">
               <h3 className="mb-3 font-display text-lg font-semibold">Continue Learning</h3>
               <div className="mb-2 text-sm text-muted-foreground">
-                {roadmapStages.find((s) => s.id === nextLesson.stageId)?.title}
+                {stages.find((s) => s.id === nextLesson.stageId)?.title}
               </div>
               <div className="mb-3 font-medium">{nextLesson.title}</div>
               <div className="mb-4 text-sm text-muted-foreground line-clamp-2">{nextLesson.description}</div>
               <Link to={`/lesson/${nextLesson.id}`}>
-                <Button className="w-full gap-2">
-                  Continue <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Button className="w-full gap-2">Continue <ArrowRight className="h-4 w-4" /></Button>
               </Link>
             </div>
           )}
-
           {bookmarkedLessons.length > 0 && (
             <div className="glass-card p-6">
               <h3 className="mb-3 font-display text-lg font-semibold">Bookmarked</h3>
               <div className="space-y-2">
                 {bookmarkedLessons.slice(0, 3).map((l) => (
-                  <Link
-                    key={l.id}
-                    to={`/lesson/${l.id}`}
-                    className="block rounded-lg bg-muted/50 p-3 text-sm transition-colors hover:bg-muted"
-                  >
+                  <Link key={l.id} to={`/lesson/${l.id}`} className="block rounded-lg bg-muted/50 p-3 text-sm transition-colors hover:bg-muted">
                     {l.title}
                   </Link>
                 ))}
@@ -128,17 +109,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Overall Progress Bar */}
       <div className="mt-8 glass-card p-6">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="font-display text-lg font-semibold">Overall Progress</h3>
           <span className="text-sm text-muted-foreground">{progressPercent}%</span>
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-muted">
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-500"
-            style={{ width: `${progressPercent}%` }}
-          />
+          <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${progressPercent}%` }} />
         </div>
       </div>
     </div>

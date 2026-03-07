@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, BarChart3, Users, Zap } from "lucide-react";
-import { roadmapStages, lessons } from "@/lib/mock-data";
 import { useApp } from "@/context/AppContext";
 
 const Home = () => {
-  const { isLoggedIn } = useApp();
+  const { isLoggedIn, stages, lessons } = useApp();
 
   return (
     <div className="flex flex-col">
@@ -22,7 +21,7 @@ const Home = () => {
               Master <span className="gradient-text">.NET Development</span> Step by Step
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              A structured roadmap with {roadmapStages.length} stages, {lessons.length} lessons, video tutorials, and hands-on projects. Track your progress and become a professional .NET developer.
+              A structured roadmap with {stages.length} stages, {lessons.length} lessons, video tutorials, and hands-on projects. Track your progress and become a professional .NET developer.
             </p>
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Link to={isLoggedIn ? "/dashboard" : "/login"}>
@@ -45,7 +44,7 @@ const Home = () => {
         <div className="container">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {[
-              { label: "Learning Stages", value: roadmapStages.length, icon: BookOpen },
+              { label: "Learning Stages", value: stages.length, icon: BookOpen },
               { label: "Video Lessons", value: lessons.length, icon: BarChart3 },
               { label: "Hours of Content", value: "40+", icon: Zap },
               { label: "Active Learners", value: "2.4K+", icon: Users },
@@ -73,7 +72,7 @@ const Home = () => {
             </p>
           </div>
           <div className="mx-auto grid max-w-4xl gap-3 md:grid-cols-2">
-            {roadmapStages.map((stage, i) => (
+            {stages.map((stage, i) => (
               <Link
                 key={stage.id}
                 to="/roadmap"
