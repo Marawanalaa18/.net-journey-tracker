@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const Header = () => {
-  const { isLoggedIn, isAdmin, isDark, toggleTheme, logout, loginAsAdmin, user } = useApp();
+  const { isLoggedIn, isAdmin, isDark, toggleTheme, logout } = useApp();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -48,16 +48,11 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-2">
-          {isLoggedIn && !isAdmin && (
-            <Button variant="ghost" size="sm" onClick={loginAsAdmin} className="hidden gap-1.5 text-xs md:flex">
-              <Shield className="h-3.5 w-3.5" /> Admin Mode
-            </Button>
-          )}
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-9 w-9">
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
           {isLoggedIn ? (
-            <Button variant="ghost" size="icon" onClick={logout} className="h-9 w-9">
+            <Button variant="ghost" size="icon" onClick={() => logout()} className="h-9 w-9">
               <LogOut className="h-4 w-4" />
             </Button>
           ) : (
@@ -85,11 +80,6 @@ const Header = () => {
                 </Link>
               );
             })}
-            {isLoggedIn && !isAdmin && (
-              <button onClick={() => { loginAsAdmin(); setMobileOpen(false); }} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted">
-                <Shield className="h-4 w-4" /> Admin Mode
-              </button>
-            )}
           </nav>
         </div>
       )}
