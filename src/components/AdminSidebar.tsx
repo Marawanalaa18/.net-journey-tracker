@@ -1,4 +1,4 @@
-import { Map, BookOpen, Library, LayoutDashboard } from "lucide-react";
+import { Map, BookOpen, Library, LayoutDashboard, Users } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -18,6 +18,7 @@ const items = [
   { title: "Stages", url: "/admin/stages", icon: Map },
   { title: "Lessons", url: "/admin/lessons", icon: BookOpen },
   { title: "Resources", url: "/admin/resources", icon: Library },
+  { title: "Users", url: "/admin/users", icon: Users },
 ];
 
 export function AdminSidebar() {

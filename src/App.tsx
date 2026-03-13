@@ -18,6 +18,7 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import AdminStages from "./pages/admin/AdminStages";
 import AdminLessons from "./pages/admin/AdminLessons";
 import AdminResources from "./pages/admin/AdminResources";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="stages" element={<AdminStages />} />
               <Route path="lessons" element={<AdminLessons />} />
               <Route path="resources" element={<AdminResources />} />
+              <Route path="users" element={<AdminUsers />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
