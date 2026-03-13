@@ -39,7 +39,7 @@ const Profile = () => {
             { label: "Completed", value: completedCount, icon: BookOpen },
             { label: "Streak", value: `${user.streak}d`, icon: Flame },
             { label: "Bookmarks", value: user.bookmarks.length, icon: BookOpen },
-            { label: "Badges", value: Math.floor(completedCount / 3), icon: Trophy },
+            { label: "Badges", value: earnedAchievementIds.length, icon: Trophy },
           ].map((s) => {
             const Icon = s.icon;
             return (
