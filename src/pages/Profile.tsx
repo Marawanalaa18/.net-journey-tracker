@@ -5,7 +5,7 @@ import { User, BookOpen, Flame, Trophy, Calendar } from "lucide-react";
 import AchievementBadges from "@/components/AchievementBadges";
 
 const Profile = () => {
-  const { user, isLoggedIn, stages, lessons } = useApp();
+  const { user, isLoggedIn, stages, lessons, achievements, earnedAchievementIds } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
