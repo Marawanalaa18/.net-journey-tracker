@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import AchievementBadges from "@/components/AchievementBadges";
 
 const Dashboard = () => {
-  const { user, isLoggedIn, stages, lessons } = useApp();
+  const { user, isLoggedIn, stages, lessons, achievements, earnedAchievementIds } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
