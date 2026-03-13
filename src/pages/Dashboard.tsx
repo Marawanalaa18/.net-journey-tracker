@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { BookOpen, Flame, Trophy, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AchievementBadges from "@/components/AchievementBadges";
 
 const Dashboard = () => {
   const { user, isLoggedIn, stages, lessons } = useApp();
