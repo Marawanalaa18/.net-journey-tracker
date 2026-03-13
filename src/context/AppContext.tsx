@@ -129,17 +129,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch user-specific data
   const fetchUserData = useCallback(async (uid: string) => {
-    const [profileRes, completedRes, bookmarksRes, notesRes, rolesRes] = await Promise.all([
+    const [profileRes, completedRes, bookmarksRes, notesRes, rolesRes, earnedRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("user_id", uid).single(),
       supabase.from("completed_lessons").select("lesson_id").eq("user_id", uid),
       supabase.from("bookmarks").select("lesson_id").eq("user_id", uid),
       supabase.from("notes").select("*").eq("user_id", uid),
       supabase.from("user_roles").select("role").eq("user_id", uid),
+      supabase.from("user_achievements").select("achievement_id").eq("user_id", uid),
     ]);
 
     const profile = profileRes.data;
     const completed = (completedRes.data || []).map((r: any) => r.lesson_id);
     const bmarks = (bookmarksRes.data || []).map((r: any) => r.lesson_id);
+    const earned = (earnedRes.data || []).map((r: any) => r.achievement_id);
     const userNotes: UserNote[] = (notesRes.data || []).map((n: any) => ({
       id: n.id,
       lessonId: n.lesson_id,
@@ -153,6 +155,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setBookmarks(bmarks);
     setNotes(userNotes);
     setIsAdmin(hasAdmin);
+    setEarnedAchievementIds(earned);
 
     if (profile) {
       setUser({
