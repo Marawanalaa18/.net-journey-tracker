@@ -99,12 +99,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  // Fetch public data (stages, lessons, resources)
+  // Fetch public data (stages, lessons, resources, achievements)
   const fetchPublicData = useCallback(async () => {
-    const [stagesRes, lessonsRes, resourcesRes] = await Promise.all([
+    const [stagesRes, lessonsRes, resourcesRes, achievementsRes] = await Promise.all([
       supabase.from("roadmap_stages").select("*").order("sort_order"),
       supabase.from("lessons").select("*").order("sort_order"),
       supabase.from("resources").select("*"),
+      supabase.from("achievements").select("*").order("sort_order"),
     ]);
 
     const dbLessons = (lessonsRes.data || []).map(mapDbLesson);
@@ -113,10 +114,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       return mapDbStage(s, ids);
     });
     const dbResources = (resourcesRes.data || []).map(mapDbResource);
+    const dbAchievements: Achievement[] = (achievementsRes.data || []).map((a: any) => ({
+      id: a.id, title: a.title, description: a.description, icon: a.icon,
+      badge_color: a.badge_color, criteria_type: a.criteria_type,
+      criteria_value: a.criteria_value, criteria_stage_id: a.criteria_stage_id,
+      sort_order: a.sort_order,
+    }));
 
     setStages(dbStages);
     setLessons(dbLessons);
     setResources(dbResources);
+    setAchievements(dbAchievements);
   }, []);
 
   // Fetch user-specific data
