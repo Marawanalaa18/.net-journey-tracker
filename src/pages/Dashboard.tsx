@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { BookOpen, Flame, Trophy, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AchievementBadges from "@/components/AchievementBadges";
 
 const Dashboard = () => {
-  const { user, isLoggedIn, stages, lessons } = useApp();
+  const { user, isLoggedIn, stages, lessons, achievements, earnedAchievementIds } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
@@ -43,7 +44,7 @@ const Dashboard = () => {
           { label: "Completed", value: `${completedCount}/${totalLessons}`, icon: BookOpen, sub: `${progressPercent}% done` },
           { label: "Streak", value: `${user.streak} days`, icon: Flame, sub: "Keep it up!" },
           { label: "Bookmarks", value: user.bookmarks.length, icon: Bookmark, sub: "Saved lessons" },
-          { label: "Badges", value: Math.floor(completedCount / 3), icon: Trophy, sub: "Achievements" },
+          { label: "Badges", value: earnedAchievementIds.length, icon: Trophy, sub: "Achievements" },
         ].map((stat) => {
           const Icon = stat.icon;
           return (
@@ -108,6 +109,13 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+
+      {achievements.length > 0 && (
+        <div className="mt-8 glass-card p-6">
+          <h3 className="mb-4 font-display text-lg font-semibold">Achievements</h3>
+          <AchievementBadges achievements={achievements} earnedIds={earnedAchievementIds} />
+        </div>
+      )}
 
       <div className="mt-8 glass-card p-6">
         <div className="mb-2 flex items-center justify-between">

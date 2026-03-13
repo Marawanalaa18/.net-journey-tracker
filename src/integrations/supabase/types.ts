@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          badge_color: string
+          created_at: string
+          criteria_stage_id: string | null
+          criteria_type: string
+          criteria_value: number
+          description: string
+          icon: string
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          badge_color?: string
+          created_at?: string
+          criteria_stage_id?: string | null
+          criteria_type: string
+          criteria_value?: number
+          description?: string
+          icon?: string
+          id: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          badge_color?: string
+          created_at?: string
+          criteria_stage_id?: string | null
+          criteria_type?: string
+          criteria_value?: number
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_criteria_stage_id_fkey"
+            columns: ["criteria_stage_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookmarks: {
         Row: {
           created_at: string
@@ -258,6 +305,35 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

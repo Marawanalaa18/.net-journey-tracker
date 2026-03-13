@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { User, UserNote, RoadmapStage, Lesson, Resource } from "@/lib/types";
+import { Achievement, checkAchievements } from "@/lib/achievements";
 import { supabase } from "@/integrations/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -12,6 +13,8 @@ interface AppContextType {
   stages: RoadmapStage[];
   lessons: Lesson[];
   resources: Resource[];
+  achievements: Achievement[];
+  earnedAchievementIds: string[];
   loading: boolean;
   login: (email: string, password: string) => Promise<string | null>;
   register: (email: string, password: string, name: string) => Promise<string | null>;
@@ -86,6 +89,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [stages, setStages] = useState<RoadmapStage[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [earnedAchievementIds, setEarnedAchievementIds] = useState<string[]>([]);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,12 +99,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  // Fetch public data (stages, lessons, resources)
+  // Fetch public data (stages, lessons, resources, achievements)
   const fetchPublicData = useCallback(async () => {
-    const [stagesRes, lessonsRes, resourcesRes] = await Promise.all([
+    const [stagesRes, lessonsRes, resourcesRes, achievementsRes] = await Promise.all([
       supabase.from("roadmap_stages").select("*").order("sort_order"),
       supabase.from("lessons").select("*").order("sort_order"),
       supabase.from("resources").select("*"),
+      supabase.from("achievements").select("*").order("sort_order"),
     ]);
 
     const dbLessons = (lessonsRes.data || []).map(mapDbLesson);
@@ -108,25 +114,34 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       return mapDbStage(s, ids);
     });
     const dbResources = (resourcesRes.data || []).map(mapDbResource);
+    const dbAchievements: Achievement[] = (achievementsRes.data || []).map((a: any) => ({
+      id: a.id, title: a.title, description: a.description, icon: a.icon,
+      badge_color: a.badge_color, criteria_type: a.criteria_type,
+      criteria_value: a.criteria_value, criteria_stage_id: a.criteria_stage_id,
+      sort_order: a.sort_order,
+    }));
 
     setStages(dbStages);
     setLessons(dbLessons);
     setResources(dbResources);
+    setAchievements(dbAchievements);
   }, []);
 
   // Fetch user-specific data
   const fetchUserData = useCallback(async (uid: string) => {
-    const [profileRes, completedRes, bookmarksRes, notesRes, rolesRes] = await Promise.all([
+    const [profileRes, completedRes, bookmarksRes, notesRes, rolesRes, earnedRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("user_id", uid).single(),
       supabase.from("completed_lessons").select("lesson_id").eq("user_id", uid),
       supabase.from("bookmarks").select("lesson_id").eq("user_id", uid),
       supabase.from("notes").select("*").eq("user_id", uid),
       supabase.from("user_roles").select("role").eq("user_id", uid),
+      supabase.from("user_achievements").select("achievement_id").eq("user_id", uid),
     ]);
 
     const profile = profileRes.data;
     const completed = (completedRes.data || []).map((r: any) => r.lesson_id);
     const bmarks = (bookmarksRes.data || []).map((r: any) => r.lesson_id);
+    const earned = (earnedRes.data || []).map((r: any) => r.achievement_id);
     const userNotes: UserNote[] = (notesRes.data || []).map((n: any) => ({
       id: n.id,
       lessonId: n.lesson_id,
@@ -140,6 +155,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setBookmarks(bmarks);
     setNotes(userNotes);
     setIsAdmin(hasAdmin);
+    setEarnedAchievementIds(earned);
 
     if (profile) {
       setUser({
@@ -333,6 +349,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setResources((r) => r.filter((x) => x.id !== id));
   }, []);
 
+  // Auto-check and grant new achievements
+  useEffect(() => {
+    if (!authUser || achievements.length === 0) return;
+    const newlyEarned = checkAchievements(
+      achievements, earnedAchievementIds,
+      completedLessons.length, user?.streak ?? 0, bookmarks.length
+    );
+    if (newlyEarned.length > 0) {
+      const inserts = newlyEarned.map((a) => ({ user_id: authUser.id, achievement_id: a.id }));
+      supabase.from("user_achievements").insert(inserts).then(() => {
+        setEarnedAchievementIds((prev) => [...prev, ...newlyEarned.map((a) => a.id)]);
+      });
+    }
+  }, [authUser, completedLessons, bookmarks, achievements, earnedAchievementIds, user?.streak]);
+
   return (
     <AppContext.Provider
       value={{
@@ -344,6 +375,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         stages,
         lessons,
         resources,
+        achievements,
+        earnedAchievementIds,
         loading,
         login,
         register,

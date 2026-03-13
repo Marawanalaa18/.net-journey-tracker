@@ -2,9 +2,10 @@ import { useApp } from "@/context/AppContext";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { User, BookOpen, Flame, Trophy, Calendar } from "lucide-react";
+import AchievementBadges from "@/components/AchievementBadges";
 
 const Profile = () => {
-  const { user, isLoggedIn, stages, lessons } = useApp();
+  const { user, isLoggedIn, stages, lessons, achievements, earnedAchievementIds } = useApp();
 
   if (!isLoggedIn || !user) {
     return (
@@ -38,7 +39,7 @@ const Profile = () => {
             { label: "Completed", value: completedCount, icon: BookOpen },
             { label: "Streak", value: `${user.streak}d`, icon: Flame },
             { label: "Bookmarks", value: user.bookmarks.length, icon: BookOpen },
-            { label: "Badges", value: Math.floor(completedCount / 3), icon: Trophy },
+            { label: "Badges", value: earnedAchievementIds.length, icon: Trophy },
           ].map((s) => {
             const Icon = s.icon;
             return (
@@ -69,6 +70,13 @@ const Profile = () => {
             );
           })}
         </div>
+
+        {achievements.length > 0 && (
+          <div className="mt-8">
+            <h3 className="mb-4 font-display text-lg font-semibold">Achievements</h3>
+            <AchievementBadges achievements={achievements} earnedIds={earnedAchievementIds} />
+          </div>
+        )}
       </div>
     </div>
   );
