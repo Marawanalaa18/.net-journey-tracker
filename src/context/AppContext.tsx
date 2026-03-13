@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { User, UserNote, RoadmapStage, Lesson, Resource } from "@/lib/types";
+import { Achievement, checkAchievements } from "@/lib/achievements";
 import { supabase } from "@/integrations/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
