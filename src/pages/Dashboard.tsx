@@ -110,6 +110,13 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {achievements.length > 0 && (
+        <div className="mt-8 glass-card p-6">
+          <h3 className="mb-4 font-display text-lg font-semibold">Achievements</h3>
+          <AchievementBadges achievements={achievements} earnedIds={earnedAchievementIds} />
+        </div>
+      )}
+
       <div className="mt-8 glass-card p-6">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="font-display text-lg font-semibold">Overall Progress</h3>
