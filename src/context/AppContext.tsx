@@ -89,6 +89,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [stages, setStages] = useState<RoadmapStage[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [earnedAchievementIds, setEarnedAchievementIds] = useState<string[]>([]);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
