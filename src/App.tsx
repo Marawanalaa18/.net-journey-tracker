@@ -18,6 +18,7 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import AdminStages from "./pages/admin/AdminStages";
 import AdminLessons from "./pages/admin/AdminLessons";
 import AdminResources from "./pages/admin/AdminResources";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 const queryClient = new QueryClient();
 
