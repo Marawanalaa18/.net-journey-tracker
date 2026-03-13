@@ -1,4 +1,4 @@
-import { Map, BookOpen, Library, LayoutDashboard } from "lucide-react";
+import { Map, BookOpen, Library, LayoutDashboard, Users } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
