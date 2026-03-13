@@ -2,6 +2,7 @@ import { useApp } from "@/context/AppContext";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { User, BookOpen, Flame, Trophy, Calendar } from "lucide-react";
+import AchievementBadges from "@/components/AchievementBadges";
 
 const Profile = () => {
   const { user, isLoggedIn, stages, lessons } = useApp();
