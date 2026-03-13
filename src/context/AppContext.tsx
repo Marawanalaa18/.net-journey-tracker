@@ -349,6 +349,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setResources((r) => r.filter((x) => x.id !== id));
   }, []);
 
+  // Auto-check and grant new achievements
+  useEffect(() => {
+    if (!authUser || achievements.length === 0) return;
+    const newlyEarned = checkAchievements(
+      achievements, earnedAchievementIds,
+      completedLessons.length, user?.streak ?? 0, bookmarks.length
+    );
+    if (newlyEarned.length > 0) {
+      const inserts = newlyEarned.map((a) => ({ user_id: authUser.id, achievement_id: a.id }));
+      supabase.from("user_achievements").insert(inserts).then(() => {
+        setEarnedAchievementIds((prev) => [...prev, ...newlyEarned.map((a) => a.id)]);
+      });
+    }
+  }, [authUser, completedLessons, bookmarks, achievements, earnedAchievementIds, user?.streak]);
+
   return (
     <AppContext.Provider
       value={{
@@ -360,6 +375,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         stages,
         lessons,
         resources,
+        achievements,
+        earnedAchievementIds,
         loading,
         login,
         register,

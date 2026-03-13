@@ -70,6 +70,13 @@ const Profile = () => {
             );
           })}
         </div>
+
+        {achievements.length > 0 && (
+          <div className="mt-8">
+            <h3 className="mb-4 font-display text-lg font-semibold">Achievements</h3>
+            <AchievementBadges achievements={achievements} earnedIds={earnedAchievementIds} />
+          </div>
+        )}
       </div>
     </div>
   );

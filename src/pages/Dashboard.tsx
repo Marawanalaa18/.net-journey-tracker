@@ -44,7 +44,7 @@ const Dashboard = () => {
           { label: "Completed", value: `${completedCount}/${totalLessons}`, icon: BookOpen, sub: `${progressPercent}% done` },
           { label: "Streak", value: `${user.streak} days`, icon: Flame, sub: "Keep it up!" },
           { label: "Bookmarks", value: user.bookmarks.length, icon: Bookmark, sub: "Saved lessons" },
-          { label: "Badges", value: Math.floor(completedCount / 3), icon: Trophy, sub: "Achievements" },
+          { label: "Badges", value: earnedAchievementIds.length, icon: Trophy, sub: "Achievements" },
         ].map((stat) => {
           const Icon = stat.icon;
           return (
