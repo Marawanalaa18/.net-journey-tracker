@@ -13,6 +13,8 @@ interface AppContextType {
   stages: RoadmapStage[];
   lessons: Lesson[];
   resources: Resource[];
+  achievements: Achievement[];
+  earnedAchievementIds: string[];
   loading: boolean;
   login: (email: string, password: string) => Promise<string | null>;
   register: (email: string, password: string, name: string) => Promise<string | null>;
