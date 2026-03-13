@@ -18,6 +18,7 @@ const items = [
   { title: "Stages", url: "/admin/stages", icon: Map },
   { title: "Lessons", url: "/admin/lessons", icon: BookOpen },
   { title: "Resources", url: "/admin/resources", icon: Library },
+  { title: "Users", url: "/admin/users", icon: Users },
 ];
 
 export function AdminSidebar() {
