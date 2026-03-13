@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { lovable } from "@/integrations/lovable/index";
 
 const Login = () => {
   const { login, register, isLoggedIn } = useApp();
